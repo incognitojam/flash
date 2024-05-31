@@ -1,6 +1,3 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-*.swp
-
 # IDEs
 .idea
 *.iml
@@ -8,35 +5,20 @@
 
 # dependencies
 /node_modules
-/.pnp
-.pnp.js
-/.pnpm-store
 
 # testing
 /coverage
 
-# next.js
-/.next/
-/out/
-
 # production
-/build
+/dist
 
 # misc
 .DS_Store
 *.pem
+*.swp
 
 # debug
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+*.log
 
 # local env files
 .env*.local
-
-# vercel
-.vercel
-
-# typescript
-*.tsbuildinfo
-next-env.d.ts
