@@ -1,4 +1,4 @@
-name: Deploy to Pages
+name: CI
 
 on:
   push:
@@ -10,21 +10,31 @@ permissions:
   id-token: write
 
 concurrency:
-  group: "pages"
-  cancel-in-progress: false
+  group: ${{ github.ref == 'refs/heads/master' && github.run_id || github.head_ref || github.ref }}-${{ github.workflow }}-${{ github.event_name }}
+  cancel-in-progress: true
 
 jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v1
+
+      - run: bun install
+      - run: bun lint
+      - run: bun test
+
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v1
-      - name: Setup Pages
-        uses: actions/configure-pages@v4
+      - uses: actions/configure-pages@v4
+
       - run: bun install
       - run: bun run build
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+
+      - uses: actions/upload-pages-artifact@v3
         with:
           path: ./dist
 
@@ -34,7 +44,7 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/master'
-    needs: build
+    needs: [test, build]
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
