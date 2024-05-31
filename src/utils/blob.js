@@ -1,5 +1,3 @@
-'use client'
-
 export async function download(url) {
   const response = await fetch(url, { mode: 'cors' })
   const reader = response.body.getReader()
@@ -15,11 +13,13 @@ export async function download(url) {
 
   const blob = new Blob(chunks)
   console.debug('[blob] Downloaded', url, blob.size)
-  if (blob.size !== contentLength) console.warn('[blob] Download size mismatch', {
-    url,
-    expected: contentLength,
-    actual: blob.size,
-  })
+  if (blob.size !== contentLength) {
+    console.warn('[blob] Download size mismatch', {
+      url,
+      expected: contentLength,
+      actual: blob.size,
+    })
+  }
 
   return blob
 }

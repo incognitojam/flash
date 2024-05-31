@@ -57,7 +57,7 @@ export class Image {
       this.fileName = `${this.name}-${json.hash_raw}.img`
       this.archiveUrl = json.url
       this.size = json.size
-    } 
+    }
 
     this.archiveFileName = this.archiveUrl.split('/').pop()
   }
@@ -76,7 +76,9 @@ export function createManifest(text) {
 
   // Check that all partitions are present
   // TODO: should we prevent flashing if there are extra partitions?
-  const missingPartitions = expectedPartitions.filter((name) => !partitions.some((image) => image.name === name))
+  const missingPartitions = expectedPartitions.filter(
+    (name) => !partitions.some((image) => image.name === name),
+  )
   if (missingPartitions.length > 0) {
     throw new Error(`Manifest is missing partitions: ${missingPartitions.join(', ')}`)
   }

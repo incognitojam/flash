@@ -1,4 +1,3 @@
-'use client'
 import { useEffect, useRef, useState } from 'react'
 
 import { FastbootDevice, setDebugLevel } from 'android-fastboot'
@@ -44,21 +43,17 @@ export const Error = {
 
 function isRecognizedDevice(deviceInfo) {
   // check some variables are as expected for a comma three
-  const {
-    kernel,
-    "max-download-size": maxDownloadSize,
-    "slot-count": slotCount,
-  } = deviceInfo
-  if (kernel !== "uefi" || maxDownloadSize !== "104857600" || slotCount !== "2") {
+  const { kernel, 'max-download-size': maxDownloadSize, 'slot-count': slotCount } = deviceInfo
+  if (kernel !== 'uefi' || maxDownloadSize !== '104857600' || slotCount !== '2') {
     console.error('[fastboot] Unrecognised device (kernel, maxDownloadSize or slotCount)', deviceInfo)
     return false
   }
 
   const partitions = []
   for (const key of Object.keys(deviceInfo)) {
-    if (!key.startsWith("partition-type:")) continue
-    let partition = key.substring("partition-type:".length)
-    if (partition.endsWith("_a") || partition.endsWith("_b")) {
+    if (!key.startsWith('partition-type:')) continue
+    let partition = key.substring('partition-type:'.length)
+    if (partition.endsWith('_a') || partition.endsWith('_b')) {
       partition = partition.substring(0, partition.length - 2)
     }
     if (partitions.includes(partition)) continue
@@ -67,14 +62,60 @@ function isRecognizedDevice(deviceInfo) {
 
   // check we have the expected partitions to make sure it's a comma three
   const expectedPartitions = [
-    "ALIGN_TO_128K_1", "ALIGN_TO_128K_2", "ImageFv", "abl", "aop", "apdp", "bluetooth", "boot", "cache",
-    "cdt", "cmnlib", "cmnlib64", "ddr", "devcfg", "devinfo", "dip", "dsp", "fdemeta", "frp", "fsc", "fsg",
-    "hyp", "keymaster", "keystore", "limits", "logdump", "logfs", "mdtp", "mdtpsecapp", "misc", "modem",
-    "modemst1", "modemst2", "msadp", "persist", "qupfw", "rawdump", "sec", "splash", "spunvm", "ssd",
-    "sti", "storsec", "system", "systemrw", "toolsfv", "tz", "userdata", "vm-linux", "vm-system", "xbl",
-    "xbl_config"
+    'ALIGN_TO_128K_1',
+    'ALIGN_TO_128K_2',
+    'ImageFv',
+    'abl',
+    'aop',
+    'apdp',
+    'bluetooth',
+    'boot',
+    'cache',
+    'cdt',
+    'cmnlib',
+    'cmnlib64',
+    'ddr',
+    'devcfg',
+    'devinfo',
+    'dip',
+    'dsp',
+    'fdemeta',
+    'frp',
+    'fsc',
+    'fsg',
+    'hyp',
+    'keymaster',
+    'keystore',
+    'limits',
+    'logdump',
+    'logfs',
+    'mdtp',
+    'mdtpsecapp',
+    'misc',
+    'modem',
+    'modemst1',
+    'modemst2',
+    'msadp',
+    'persist',
+    'qupfw',
+    'rawdump',
+    'sec',
+    'splash',
+    'spunvm',
+    'ssd',
+    'sti',
+    'storsec',
+    'system',
+    'systemrw',
+    'toolsfv',
+    'tz',
+    'userdata',
+    'vm-linux',
+    'vm-system',
+    'xbl',
+    'xbl_config',
   ]
-  if (!partitions.every(partition => expectedPartitions.includes(partition))) {
+  if (!partitions.every((partition) => expectedPartitions.includes(partition))) {
     console.error('[fastboot] Unrecognised device (partitions)', partitions)
     return false
   }
@@ -155,10 +196,11 @@ export function useFastboot() {
         }
 
         // TODO: change manifest once alt image is in release
-        imageWorker.current?.init()
+        imageWorker.current
+          ?.init()
           .then(() => download(config.manifests['master']))
-          .then(blob => blob.text())
-          .then(text => {
+          .then((blob) => blob.text())
+          .then((text) => {
             manifest.current = createManifest(text)
 
             // sanity check
@@ -186,10 +228,12 @@ export function useFastboot() {
       }
 
       case Step.CONNECTING: {
-        fastboot.current.waitForConnect()
+        fastboot.current
+          .waitForConnect()
           .then(() => {
             console.info('[fastboot] Connected', { fastboot: fastboot.current })
-            return fastboot.current.getVariable('all')
+            return fastboot.current
+              .getVariable('all')
               .then((all) => {
                 const deviceInfo = all.split('\n').reduce((obj, line) => {
                   const parts = line.split(':')
@@ -222,11 +266,10 @@ export function useFastboot() {
             setConnected(false)
           })
 
-        fastboot.current.connect()
-          .catch((err) => {
-            console.error('[fastboot] Connection error', err)
-            setStep(Step.READY)
-          })
+        fastboot.current.connect().catch((err) => {
+          console.error('[fastboot] Connection error', err)
+          setStep(Step.READY)
+        })
         break
       }
 
@@ -349,7 +392,7 @@ export function useFastboot() {
   useEffect(() => {
     if (error !== Error.NONE) {
       console.debug('[fastboot] error', error)
-      plausible('error', { props: { error }})
+      plausible('error', { props: { error } })
       setProgress(-1)
       setOnContinue(null)
 

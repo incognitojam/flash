@@ -9,7 +9,10 @@
     "build": "vite build",
     "start": "vite preview",
     "lint": "eslint .",
-    "test": "vitest"
+    "lint:fix": "eslint --fix .",
+    "test": "vitest",
+    "prettier": "prettier --check .",
+    "prettier:fix": "prettier --write ."
   },
   "packageManager": "bun",
   "engines": {

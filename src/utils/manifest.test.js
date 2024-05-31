@@ -9,7 +9,7 @@ async function getImageWorker() {
   let imageWorker
 
   vi.mock('comlink')
-  vi.mocked(Comlink.expose).mockImplementation(worker => {
+  vi.mocked(Comlink.expose).mockImplementation((worker) => {
     imageWorker = worker
     imageWorker.init()
   })
@@ -33,8 +33,8 @@ for (const [branch, manifestUrl] of Object.entries(config.manifests)) {
       storage: {
         getDirectory: () => ({
           getFileHandle: () => imageWorkerFileHandler,
-        })
-      }
+        }),
+      },
     }
 
     const imageWorker = await getImageWorker()
@@ -59,16 +59,20 @@ for (const [branch, manifestUrl] of Object.entries(config.manifests)) {
           })
         }
 
-        test('image and checksum', async () => {
-          imageWorkerFileHandler.getFile.mockImplementation(async () => {
-            const response = await fetch(image.archiveUrl)
-            expect(response.ok, 'to be uploaded').toBe(true)
+        test(
+          'image and checksum',
+          async () => {
+            imageWorkerFileHandler.getFile.mockImplementation(async () => {
+              const response = await fetch(image.archiveUrl)
+              expect(response.ok, 'to be uploaded').toBe(true)
 
-            return response.blob()
-          })
+              return response.blob()
+            })
 
-          await imageWorker.unpackImage(image)
-        }, 8 * 60 * 1000)
+            await imageWorker.unpackImage(image)
+          },
+          8 * 60 * 1000,
+        )
       })
     }
   })
