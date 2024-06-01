@@ -4,10 +4,17 @@ import eslintConfigPrettier from 'eslint-config-prettier'
 import solid from 'eslint-plugin-solid/configs/recommended.js'
 
 export default [
-  { languageOptions: { globals: globals.browser } },
+  {
+    languageOptions: {
+      globals: {
+        ...globals.browser,
+        ...globals.es2017,
+      },
+    },
+  },
   js.configs.recommended,
   {
-    files: ['src/**/*.{js,jsx,ts,tsx}'],
+    files: ['src/**/*.{js,jsx}'],
     ...solid,
   },
   eslintConfigPrettier,
