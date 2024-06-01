@@ -16,7 +16,7 @@
   },
   "packageManager": "bun",
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=20.11.0"
   },
   "dependencies": {
     "@fontsource-variable/inter": "^5.0.18",
