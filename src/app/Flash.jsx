@@ -1,6 +1,3 @@
-import { useCallback } from 'react'
-import Image from 'next/image'
-
 import { Step, Error, useFastboot } from '@/utils/fastboot'
 
 import bolt from '@/assets/bolt.svg'
@@ -230,7 +227,7 @@ export default function Flash() {
         style={{ cursor: onContinue ? 'pointer' : 'default' }}
         onClick={handleContinue}
       >
-        <Image
+        <img
           src={icon}
           alt="cable"
           width={128}

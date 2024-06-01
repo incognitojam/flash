@@ -1,5 +1,3 @@
-import { useEffect, useRef } from 'react'
-
 import * as Comlink from 'comlink'
 
 import imageWorkerUrl from '../workers/image.worker?worker&url'
